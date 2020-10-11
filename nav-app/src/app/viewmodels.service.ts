@@ -411,14 +411,14 @@ export class ViewModel {
         console.log(this.name, "initializing technique VMs");
         for (let technique of this.dataService.techniques) {
             for (let id of technique.get_all_technique_tactic_ids()) {
-                let techniqueVM = new TechniqueVM(id);
+                let techniqueVM = new TechniqueVM(id, technique.adtechnique);
                 techniqueVM.score = this.initializeScoresTo;
                 this.setTechniqueVM(techniqueVM, false);
             }
             //init subtechniques
             for (let subtechnique of technique.subtechniques) {
                 for (let id of subtechnique.get_all_technique_tactic_ids()) {
-                    let techniqueVM = new TechniqueVM(id);
+                    let techniqueVM = new TechniqueVM(id, technique.adtechnique);
                     techniqueVM.score = this.initializeScoresTo;
                     this.setTechniqueVM(techniqueVM, false);
                 }
@@ -1262,6 +1262,7 @@ export class TechniqueVM {
     techniqueID: string;
     technique_tactic_union_id: string;
     tactic: string;
+	adtechnique: string[];
 
     score: string = "";
     scoreColor: any; //color for score gradient
@@ -1302,6 +1303,7 @@ export class TechniqueVM {
     serialize(): string {
         let rep: {[k: string]: any } = {};
         rep.techniqueID = this.techniqueID;
+		rep.adtechnique = this.adtechnique;
         rep.tactic = this.tactic;
         if (this.score !== "" && !(isNaN(Number(this.score)))) rep.score = Number(this.score);
         rep.color = this.color;
@@ -1319,6 +1321,7 @@ export class TechniqueVM {
      * @param rep serialized technique string
      */
     deSerialize(rep: string, techniqueID: string, tactic: string): void {
+		console.log(rep);
         let obj = JSON.parse(rep);
         if (techniqueID !== undefined) this.techniqueID = techniqueID;
         else console.error("ERROR: TechniqueID field not present in technique")
@@ -1362,11 +1365,12 @@ export class TechniqueVM {
 
     }
 
-    constructor(technique_tactic_union_id: string) {
+    constructor(technique_tactic_union_id: string, adtechnique: string[] = []) {
         this.technique_tactic_union_id = technique_tactic_union_id;
         var idSplit = technique_tactic_union_id.split("^");
         this.techniqueID = idSplit[0];
         this.tactic = idSplit[1];
+        this.adtechnique = adtechnique;
     }
 }
 

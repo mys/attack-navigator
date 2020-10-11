@@ -317,6 +317,7 @@ export class DataService {
  */ 
 export abstract class BaseStix {
     public readonly id: string;          //STIX ID
+	public readonly adtechnique: string[]; // active defense technique
     public readonly attackID: string;    // ATT&CK ID
     public readonly name: string;        // name of object
     public readonly description: string; // description of object
@@ -327,6 +328,7 @@ export abstract class BaseStix {
         this.id = stixSDO.id;
         this.name = stixSDO.name;
         this.description = stixSDO.description;
+        this.adtechnique = stixSDO.adtechnique;
         this.attackID = stixSDO.external_references[0].external_id;
         this.stage = stixSDO.external_references[0].source_name == "mitre-pre-attack" ? "prepare" : "act";
         this.url = stixSDO.external_references[0].url;
