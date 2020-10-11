@@ -8,6 +8,7 @@ WORKDIR /nav-app/
 COPY . ./
 
 # install packages and build 
+RUN npm run postinstall
 RUN npm install --unsafe-perm
 
 EXPOSE 4200
